@@ -123,9 +123,27 @@ public class Build {
    * @return a set of values that cannot be reached from the starting value
    */
   public static <T> Set<T> unreachable(Map<T, List<T>> graph, T starting) {
-    return unreachable(graph, starting, new HashSet<>());
+    Set<T> visited = new HashSet<>();
+    if(graph.containsKey(starting)){
+    unreachable(graph, starting, visited);
+    }
+    Set<T> result = new HashSet<>();
+
+    for(T node: graph.keySet()){
+      if(!visited.contains(node)){
+        result.add(node);
+      }
+    }
+    return result;
   }
-  private static <T> Set<T> unreachable(Map<T, List<T>> graph, T starting, Set<T> visited){
-    if(visited.contains(starting)) return
+  private static <T> void unreachable(Map<T, List<T>> graph, T starting, Set<T> visited){
+    if(visited.contains(starting)) return;
+
+    visited.add(starting);
+    
+    for(T neighbor: graph.get(starting)){
+      unreachable(graph, neighbor, visited);
+    }
+    
   }
 }
